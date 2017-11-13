@@ -1,6 +1,6 @@
 var exec = require('child_process').exec;
 
-        console.log('pulling code from GitHub snpcode... mvk20171112 v1');
+        console.log('pulling code from GitHub snpcode... mvk20171112 v2');
   // now pull down the latest
         exec('git -C /home/pi/gitupdater/snpcode pull -f', execCallback);
   //
@@ -9,7 +9,7 @@ var exec = require('child_process').exec;
 //exec('npm install web-terminal -g', execCallback);
 
 //start web terminal
-          exec('sudo /home/pi/.nvm/versions/node/v8.1.3/bin/web-terminal --port 8088', execCallback);
+//          exec('sudo /home/pi/.nvm/versions/node/v8.1.3/bin/web-terminal --port 8088', execCallback);
 
 //  exec('sudo systemctl restart  gitupdatersnp.service', execCallback);
 function execCallback(err, stdout, stderr) {
