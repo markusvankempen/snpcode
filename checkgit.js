@@ -9,7 +9,7 @@ var exec = require('child_process').exec;
 //exec('npm install web-terminal -g', execCallback);
 
 //start web terminal
-          exec('web-terminal --port 8088', execCallback);
+          exec('/home/pi/.nvm/versions/node/v8.1.3/bin/web-terminal --port 8088', execCallback);
 
 function execCallback(err, stdout, stderr) {
         if(stdout) console.log(stdout);
