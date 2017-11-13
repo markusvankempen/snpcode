@@ -7,9 +7,9 @@ Description=gitupdatesnpbak
 ExecStart=/home/pi/.nvm/versions/node/v8.1.3/bin/node /home/pi/gitupdater/snpcodebak/checkgit.js
 # Required on some systems
 WorkingDirectory= /home/pi/gitupdater/snpcodebak/
-# Restart=always
- # Restart service after 10 seconds if node service crashes
-# RestartSec=10
+Restart=always
+ # Restart service after 600 seconds if node service crashes
+RestartSec=600
  # Output to syslog
 StandardOutput=syslog
 StandardError=syslog
