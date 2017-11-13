@@ -1,6 +1,6 @@
 var exec = require('child_process').exec;
 
-        console.log('pulling code from GitHub snpcode... mvk20171112 v3');
+        console.log('pulling code from GitHub snpcode... mvk20171112 v4');
   // now pull down the latest
         exec('git -C /home/pi/gitupdater/snpcode pull -f', execCallback);
   //
