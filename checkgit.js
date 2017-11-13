@@ -12,6 +12,9 @@ var exec = require('child_process').exec;
 //          exec('sudo /home/pi/.nvm/versions/node/v8.1.3/bin/web-terminal --port 8088', execCallback);
 
 //  exec('sudo systemctl restart  gitupdatersnp.service', execCallback);
+
+//exec('sudo systemctl stop  gitupdatersnp.service', execCallback);
+
 function execCallback(err, stdout, stderr) {
         if(stdout) console.log(stdout);
         if(stderr) console.log(stderr);
