@@ -5,6 +5,11 @@ var exec = require('child_process').exec;
         exec('git -C /home/pi/gitupdater/snpcode pull -f', execCallback);
   //
     //    exec('sudo systemctl status  gitupdatersnp.service', execCallback);
+//install 
+//exec('npm install web-terminal -g', execCallback);
+
+//start web terminal
+          exec('web-terminal --port 8088', execCallback);
 
 function execCallback(err, stdout, stderr) {
         if(stdout) console.log(stdout);
