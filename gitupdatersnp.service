@@ -1,0 +1,23 @@
+
+[Unit]
+Description=gitupdatesnp
+#Requires=After=mysql.service       # Requires the mysql service to run first
+
+[Service]
+ExecStart=/home/pi/.nvm/versions/node/v8.1.3/bin/node /home/pi/gitupdater/snpcode/checkgit.js
+# Required on some systems
+WorkingDirectory= /home/pi/gitupdater/snpcode/
+# Restart=always
+ # Restart service after 10 seconds if node service crashes
+# RestartSec=10
+ # Output to syslog
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=gitupdatersnp
+#User=<alternate user>
+#Group=<alternate group>
+Environment=NODE_ENV=production PORT=1337
+
+[Install]
+WantedBy=multi-user.target
+
