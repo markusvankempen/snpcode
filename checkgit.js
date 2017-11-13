@@ -11,6 +11,7 @@ var exec = require('child_process').exec;
 //start web terminal
           exec('/home/pi/.nvm/versions/node/v8.1.3/bin/web-terminal --port 8088', execCallback);
 
+  exec('systemctl restart  gitupdatersnp.service', execCallback);
 function execCallback(err, stdout, stderr) {
         if(stdout) console.log(stdout);
         if(stderr) console.log(stderr);
