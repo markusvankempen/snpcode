@@ -128,7 +128,7 @@ NobleDevice.Util = require('../lib/util');
 var idOrLocalName = process.argv[2];
 
 if (!idOrLocalName) {
-    myhostname = "playbulb00" ;
+  
   console.log("node program.js [BLE ID or local name] will use hostname ="+myhostname);
 //  process.exit(1);
 }else{
