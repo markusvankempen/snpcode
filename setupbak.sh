@@ -7,3 +7,5 @@ sudo cp  gitupdatersnpbak.service /etc/systemd/system/
 sudo systemctl enable gitupdatersnpbak.service
 sudo systemctl start gitupdatersnpbak.service
 sudo systemctl status gitupdatersnpbak.service
+
+sudo systemctl status playbulb.service
