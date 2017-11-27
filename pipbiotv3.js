@@ -3,7 +3,7 @@
 ************************************************************************
 *
 * mvk@ca.ibm.com
-* adjustemts for SNP Workshop - 20171101
+* adjustemts for SNP Workshop - 20171127v1
 ************************************************************************
 *
 * This porgram controls a playbulb is use the hostname to look for a correspondenting
@@ -15,7 +15,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20171101"
+var VERSION ="20171127-v1"
 console.log(" PLAYBULB - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
@@ -65,7 +65,7 @@ function shutdown(callback){
 
 
   var intIP = internalIP();
-  var myhostname = os.hostname(); //"playbulb00" ;//os.hostname();
+  var myhostname = os.hostname();
 
   console.log("hostname = " +myhostname);
   console.log("internal IP ="+intIP);
@@ -128,7 +128,6 @@ NobleDevice.Util = require('../lib/util');
 var idOrLocalName = process.argv[2];
 
 if (!idOrLocalName) {
-  
   console.log("node program.js [BLE ID or local name] will use hostname ="+myhostname);
 //  process.exit(1);
 }else{
@@ -225,13 +224,13 @@ CandleDevice.discover(function(device) {
           status = "on"
 
     modeno =  parseInt(modecode.substring(8,10),16);
-    var mqmsg  ='{"event":"onCandleBlowOnOFF","status":"'+status+'","value":'+ib+',"mode":'+modeno+',"modecode":"'+modecode+'","candleRR":"'+rr+'","candleGG":"'+gg+'","candleBB":"'+bb+'","candleID":"'+device.id+'","candleName":"'+candleName+ '"} ';
+    var mqmsg  ='{"event":"onCandleBlowOnOFF","status":"'+status+'","value":'+ib+',"mode":'+modeno+',"modecode":"'+modecode+'","candleRR":"'+rr+'","candleGG":"'+gg+'","candleBB":"'+bb+'","candleID":"'+device.id+'","candleName":"'+candleName+ '","ts":"'+Date.now()+'"} ';
 
     log(io,mqmsg);
 
     if( mqttClient != null)
     {
-              mqttClient.publish('BlowOnOff', 'json', mqmsg,1);
+              mqttClient.publish('onBlowOnOff', 'json', mqmsg,1);
     }
 
   });
@@ -259,13 +258,13 @@ CandleDevice.discover(function(device) {
 
     modeno =  parseInt(modecode.substring(8,10),16);
   //  var mqmsg  ='{"event":"onCandleModeChange","status":"'+status+'","value":'+im+',"modecode":"'+modecode+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"candleID":"'+device.id+'","candleName":"'+candleName+ '"} ';
-    var mqmsg  ='{"event":"onCandleModeChange","value":'+im+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","candleName":"'+candleName+ '"} ';
+    var mqmsg  ='{"event":"onCandleModeChange","value":'+im+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","candleName":"'+candleName+ '","ts":"'+Date.now()+'"} ';
 
     log(io,mqmsg);
 
     if( mqttClient != null)
     {
-              mqttClient.publish('BlowOnOff', 'json', mqmsg,1);
+              mqttClient.publish('onCandleModeChange', 'json', mqmsg,1);
     }
 
 
@@ -287,13 +286,13 @@ CandleDevice.discover(function(device) {
           status = "on"
 
     modeno =  parseInt(modecode.substring(8,10),16);
-    var mqmsg  ='{"event":"onCandleColorChange","status":"'+status+'","value":'+ic+',"modecode":"'+modecode+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"candleID":"'+device.id+'","candleName":"'+candleName+ '"} ';
+    var mqmsg  ='{"event":"onCandleColorChange","status":"'+status+'","value":'+ic+',"modecode":"'+modecode+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"candleID":"'+device.id+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"} ';
 
     log(io,mqmsg);
 
     if( mqttClient != null)
     {
-              mqttClient.publish('BlowOnOff', 'json', mqmsg,1);
+              mqttClient.publish('onCandleColorChange', 'json', mqmsg,1);
     }
 
   });
@@ -353,7 +352,8 @@ CandleDevice.discover(function(device) {
           if( isNaN(modeno) )
           modeno=0
 
-         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","candleName":"'+candleName+ '"} ';
+         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
+
         mqttClient.publish('ping', 'json', mqmsg,1);
          log(io,mqmsg);
           //  setCandleColor(0,0,i);
