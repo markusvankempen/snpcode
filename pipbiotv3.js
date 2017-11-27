@@ -15,6 +15,8 @@
 *
 ************************************************************************
 */
+var VERSION ="20171101"
+console.log(" PLAYBULB - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
 
@@ -63,7 +65,7 @@ function shutdown(callback){
 
 
   var intIP = internalIP();
-  var myhostname = os.hostname();// "playbulb00" ;//os.hostname();
+  var myhostname = os.hostname(); //"playbulb00" ;//os.hostname();
 
   console.log("hostname = " +myhostname);
   console.log("internal IP ="+intIP);
@@ -403,10 +405,11 @@ function getCandleInfos()
         console.log('readManufacturerName '+data);
       });
 
+/*
       device.readModelNumber(function(error,data) {
         console.log('readModelNumber '+data);
       });
-
+*/
   device.getName(function(error,data) {
   //  console.log('getName  = '+ data);
       candleName = data;
