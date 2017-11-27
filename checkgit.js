@@ -9,6 +9,7 @@ function startwork(err, stdout, stderr) {
   // now pull down the latest
         console.log("executing 'git -C /home/pi/gitupdater/snpcode pull -f'");
         exec('git -C /home/pi/gitupdater/snpcode pull -f', execCallback);
+
   //
     //    exec('sudo systemctl status  gitupdatersnp.service', execCallback);
 //install 
@@ -33,6 +34,12 @@ function execCallback(err, stdout, stderr) {
             console.log("Found git update will reboot in 30 sec")
             exec('sleep 30', myreboot);
             
+          }else{
+          
+            
+          console.log("executing 'cp /home/pi/gitupdater/snpcode/c*.js  /home/pi/gitupdater/'");
+          exec('cp /home/pi/gitupdater/snpcode/c*.js  /home/pi/gitupdater/', execCallbackNoCheck);
+  
           }
             
         }
@@ -47,5 +54,11 @@ exec('reboot', execCallback);
 function execCallboot(err, stdout, stderr) {
 }  
 
-
-//
+function execCallbackNoCheck(err, stdout, stderr) {
+          if(err) console.log("Err ="+err);
+        if(stdout) 
+        {
+          console.log("StdOut ="+stdout); 
+        }
+        if(stderr) console.log("StdErr ="+stderr);
+}  
