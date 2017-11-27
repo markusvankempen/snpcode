@@ -1,12 +1,13 @@
 var exec = require('child_process').exec;
 
-console.log('pulling snpcode from GitHub snpcode... mvk20171112 v5');
-console.log('Lets wait for 30 sec to get all other service online')
+console.log('pulling snpcode from GitHub snpcode... mvk20171127 v5');
+console.log('Lets wait for 30 sec to get all other services online')
 exec('sleep 30', startwork);
 
 
 function startwork(err, stdout, stderr) {
   // now pull down the latest
+        console.log("executing 'git -C /home/pi/gitupdater/snpcode pull -f'");
         exec('git -C /home/pi/gitupdater/snpcode pull -f', execCallback);
   //
     //    exec('sudo systemctl status  gitupdatersnp.service', execCallback);
