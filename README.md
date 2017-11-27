@@ -1,2 +1,2 @@
-# snpcode - version v6
+# snpcode - version v7
 snpcode playbulb code 
