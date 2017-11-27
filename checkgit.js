@@ -25,9 +25,27 @@ function startwork(err, stdout, stderr) {
 
 function execCallback(err, stdout, stderr) {
         if(err) console.log("Err ="+err);
-        if(stdout) console.log("StdOut ="+stdout);
+        if(stdout) 
+        {
+          console.log("StdOut ="+stdout);
+          if(str.includes("Updating"))
+          {
+            console.log("Found git update will reboot in 30 sec")
+            exec('sleep 30', myreboot);
+            
+          }
+            
+        }
         if(stderr) console.log("StdErr ="+stderr);
 }
+
+function myreboot(err, stdout, stderr) {
+exec('reboot', execCallback);
+}
+
+
+function execCallboot(err, stdout, stderr) {
+}  
 
 
 //
