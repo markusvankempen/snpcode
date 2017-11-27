@@ -28,7 +28,7 @@ function execCallback(err, stdout, stderr) {
         if(stdout) 
         {
           console.log("StdOut ="+stdout);
-          if(str.includes("Updating"))
+          if(myreboot.includes("Updating"))
           {
             console.log("Found git update will reboot in 30 sec")
             exec('sleep 30', myreboot);
