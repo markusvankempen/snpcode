@@ -9,3 +9,4 @@ sudo systemctl enable gitupdatersnp.service
 sudo systemctl start gitupdatersnp.service
 sudo systemctl status gitupdatersnp.service
 
+sudo systemctl status playbulb.service
