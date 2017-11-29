@@ -47,7 +47,7 @@ function execCallback(err, stdout, stderr) {
             
           }else{
           
-          console.log("Nothing to do - all Uptodate");   
+          console.log("All Uptodate");   
             
              console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.Now());
              exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.Now(), execCallbackNoCheck);
@@ -60,6 +60,9 @@ function execCallback(err, stdout, stderr) {
             
         }
         if(stderr) console.log("StdErr ="+stderr);
+  
+  if(!(stderr && err && stdout))
+   console.log("Nothing to do"); 
 }
 
 function myreboot(err, stdout, stderr) {
