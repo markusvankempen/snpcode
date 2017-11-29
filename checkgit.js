@@ -36,8 +36,8 @@ function execCallback(err, stdout, stderr) {
             
              //// Update Candle Code START
             
-             console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.Now());
-             exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.Now(), execCallbackNoCheck);
+             console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.now());
+             exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv3-usev2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
@@ -49,8 +49,8 @@ function execCallback(err, stdout, stderr) {
           
           console.log("All Uptodate");   
             
-             console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.Now());
-             exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.Now(), execCallbackNoCheck);
+             console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.now());
+             exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv3-usev2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
