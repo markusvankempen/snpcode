@@ -61,8 +61,9 @@ function execCallback(err, stdout, stderr) {
         }
         if(stderr) console.log("StdErr ="+stderr);
   
-  if(!(stderr && err && stdout))
-   console.log("Nothing to do"); 
+  
+    if(!(stderr == "" && err == "" && stdout ==""))
+      console.log("No Error nor message - Nothing to do - all good"); 
 }
 
 function myreboot(err, stdout, stderr) {
