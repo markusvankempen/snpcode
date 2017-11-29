@@ -1,8 +1,8 @@
 var exec = require('child_process').exec;
 
-console.log('pulling snpcode from GitHub snpcode... mvk20171127 v5');
+console.log('pulling snpcode from GitHub snpcode... mvk20171127 v7');
 console.log('Lets wait for 30 sec to get all other services online')
-exec('sleep 30', startwork);
+//exec('sleep 30', startwork);
 
 
 function startwork(err, stdout, stderr) {
@@ -37,19 +37,19 @@ function execCallback(err, stdout, stderr) {
              //// Update Candle Code START
             
              console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.Now());
-             exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.Now()), execCallbackNoCheck);
+             exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.Now(), execCallbackNoCheck);
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv3-usev2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
             /**/
             ///// Update END
-            exec('sleep 30', myreboot);
+          //  exec('sleep 30', myreboot);
             
           }else{
           
           console.log("Nothing to do - all Uptodate");   
             
-              console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.Now());
+             console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.Now());
              exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.Now()), execCallbackNoCheck);
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv3-usev2.js', execCallbackNoCheck);  
