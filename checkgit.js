@@ -2,7 +2,7 @@ var exec = require('child_process').exec;
 
 console.log('pulling snpcode from GitHub snpcode... mvk20171127 v7');
 console.log('Lets wait for 30 sec to get all other services online')
-//exec('sleep 30', startwork);
+exec('sleep 30', startwork);
 
 
 function startwork(err, stdout, stderr) {
