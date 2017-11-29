@@ -40,11 +40,14 @@ function execCallback(err, stdout, stderr) {
          // console.log("executing 'cp /home/pi/gitupdater/snpcode/c*.js  /home/pi/gitupdater/'");
          // exec('cp /home/pi/gitupdater/snpcode/c*.js  /home/pi/gitupdater/', execCallbackNoCheck);
   ///playbulb/snp00/
-         //  exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js', execCallbackNoCheck);
-          // exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
-          // exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv3-usev2.js', execCallbackNoCheck);  
-          // exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
+         
+            // Update Candle Code START
             
+             exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js', execCallbackNoCheck);
+             exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
+             exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv3-usev2.js', execCallbackNoCheck);  
+             exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
+            // Update END
             
           }
             
