@@ -15,7 +15,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20171127-v1"
+var VERSION ="20171127-v2"
 console.log(" PLAYBULB - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
@@ -224,7 +224,7 @@ CandleDevice.discover(function(device) {
           status = "on"
 
     modeno =  parseInt(modecode.substring(8,10),16);
-    var mqmsg  ='{"event":"onCandleBlowOnOFF","status":"'+status+'","value":'+ib+',"mode":'+modeno+',"modecode":"'+modecode+'","candleRR":"'+rr+'","candleGG":"'+gg+'","candleBB":"'+bb+'","candleID":"'+device.id+'","candleName":"'+candleName+ '","ts":"'+Date.now()+'"} ';
+    var mqmsg  ='{"event":"onCandleBlowOnOFF","status":"'+status+'","value":'+ib+',"mode":'+modeno+',"modecode":"'+modecode+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"candleID":"'+device.id+'","candleName":"'+candleName+ '","ts":"'+Date.now()+'"} ';
 
     log(io,mqmsg);
 
