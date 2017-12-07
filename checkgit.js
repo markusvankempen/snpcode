@@ -33,7 +33,8 @@ function execCallback(err, stdout, stderr) {
           {
             console.log("Found git update will reboot in 30 sec")
             
-            exec('cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);  
+            // Update Networksetting
+            //exec('cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);  
                         
              //// Update Candle Code START
             /*
@@ -44,7 +45,7 @@ function execCallback(err, stdout, stderr) {
              exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
             */
             ///// Update END
-            exec('sleep 30', myreboot);
+           // exec('sleep 30', myreboot);
             
           }else{
           
