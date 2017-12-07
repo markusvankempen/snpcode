@@ -29,19 +29,19 @@ function execCallback(err, stdout, stderr) {
         if(stdout) 
         {
           console.log("StdOut ="+stdout);
-          if(stdout.includes("Updating"))
+          if(stdout.includes("Updating")) ///did we update the code
           {
             console.log("Found git update will reboot in 30 sec")
             
             
              //// Update Candle Code START
-            
+            /*
              console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.now());
              exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv3-usev2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
-            /**/
+            */
             ///// Update END
           //  exec('sleep 30', myreboot);
             
