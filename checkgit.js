@@ -44,7 +44,7 @@ function execCallback(err, stdout, stderr) {
              exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
             */
             ///// Update END
-        //    exec('sleep 30', myreboot);
+            exec('sleep 30', myreboot);
             
           }else{
           
