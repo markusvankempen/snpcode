@@ -37,7 +37,7 @@ function execCallback(err, stdout, stderr) {
             //exec('cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);  
                         
              //// Update Candle Code START
-            
+          /*  
              console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.now());
              exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
@@ -46,7 +46,7 @@ function execCallback(err, stdout, stderr) {
             
             ///// Update END
             exec('sleep 60', myreboot);
-            
+            */
           }else{
           
           console.log("All Uptodate");   
