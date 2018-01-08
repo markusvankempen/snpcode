@@ -1,8 +1,8 @@
 var exec = require('child_process').exec;
 
 console.log('pulling snpcode from GitHub snpcode... mvk20171127 v7');
-console.log('Lets wait for 30 sec to get all other services online')
-exec('sleep 60', startwork);
+console.log('Lets wait for 90 sec to get all other services online')
+exec('sleep 90', startwork);
 
 
 function startwork(err, stdout, stderr) {
@@ -45,8 +45,9 @@ function execCallback(err, stdout, stderr) {
              exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
             
             ///// Update END
-            exec('sleep 60', myreboot);
-            */
+             */
+            exec('sleep 90', myreboot);
+           
           }else{
           
           console.log("All Uptodate");   
