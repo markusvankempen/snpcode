@@ -2,7 +2,7 @@ var exec = require('child_process').exec;
 
 console.log('pulling snpcode from GitHub snpcode... mvk20171127 v5');
 console.log('Lets wait for 30 sec to get all other services online')
-exec('sleep 30', startwork);
+exec('sleep 120', startwork);
 
 
 function startwork(err, stdout, stderr) {
@@ -32,13 +32,13 @@ function execCallback(err, stdout, stderr) {
           if(stdout.includes("Updating"))
           {
             console.log("Found git update will reboot in 30 sec")
-            exec('sleep 30', myreboot);
+          //  exec('sleep 120', myreboot);
             
           }else{
           
             
-          console.log("executing 'cp /home/pi/gitupdater/snpcode/c*.js  /home/pi/gitupdater/'");
-          exec('cp /home/pi/gitupdater/snpcode/c*.js  /home/pi/gitupdater/', execCallbackNoCheck);
+       //   console.log("executing 'cp /home/pi/gitupdater/snpcode/c*.js  /home/pi/gitupdater/'");
+        //  exec('cp /home/pi/gitupdater/snpcode/c*.js  /home/pi/gitupdater/', execCallbackNoCheck);
   
           }
             
