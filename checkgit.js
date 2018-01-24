@@ -46,7 +46,7 @@ function execCallback(err, stdout, stderr) {
             
             ///// Update END
              */
-            exec('sleep 90', myreboot);
+         //   exec('sleep 90', myreboot);
            
           }else{
           
