@@ -31,10 +31,11 @@ function execCallback(err, stdout, stderr) {
           console.log("StdOut ="+stdout);
           if(stdout.includes("Updating")) ///did we update the code
           {
-            console.log("Found git update will reboot in 30 sec")
+            console.log("Found git update will reboot in 90 sec")
             
             // Update Networksetting
-            //exec('cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);  
+            console.log("Update Networksetting")
+            exec('cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);  
                         
              //// Update Candle Code START
           /*  
