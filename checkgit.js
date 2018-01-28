@@ -23,7 +23,6 @@ function startwork(err, stdout, stderr) {
 //exec('sudo systemctl stop  gitupdatersnp.service', execCallback);
 }
 
-
 function execCallback(err, stdout, stderr) {
         if(err) console.log("Err ="+err);
         if(stdout) 
