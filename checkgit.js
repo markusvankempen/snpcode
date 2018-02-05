@@ -3,7 +3,6 @@ console.log('pulling snpcode from GitHub snpcode... mvk20170205 v9');
 console.log('Lets wait for 90 sec to get all other services online')
 exec('sleep 90', startwork);
 
-
 function startwork(err, stdout, stderr) {
   // now pull down the latest
         console.log("executing 'git -C /home/pi/gitupdater/snpcode pull -f'");
