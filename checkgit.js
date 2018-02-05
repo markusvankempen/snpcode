@@ -34,7 +34,13 @@ function execCallback(err, stdout, stderr) {
             
             // Update Networksetting
             console.log("Update Networksetting")
-            exec('cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);  
+            exec('cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);
+
+             console.log("Updateing script");
+             exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
+             exec('cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
+             exec('cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1-is-in-pipbiotv2.js', execCallbackNoCheck);              
+            
                         
              //// Update Candle Code START
           /*  
@@ -46,7 +52,7 @@ function execCallback(err, stdout, stderr) {
             
             ///// Update END
              */
-            exec('sleep 90', myreboot);
+           // exec('sleep 90', myreboot);
            
           }else{
           
