@@ -36,12 +36,16 @@ function execCallback(err, stdout, stderr) {
             exec('sudo cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);
 
              console.log("Updateing script");
-            
+            console.log("Backup old script pipbiotv2.js ");
              exec('sudo mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
-             exec('sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
-             exec('sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1-is-in-pipbiotv2.js', execCallbackNoCheck);              
-              exec('sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1.js', execCallbackNoCheck);  
-              exec('sudo cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
+             console.log("cp pipbgpiov1.js  to pipbiotv2.js");
+            exec('sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
+            console.log("cp pipbgpiov1.js  to pipbgpiov1-is-in-pipbiotv2.js");
+            exec('sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1-is-in-pipbiotv2.js', execCallbackNoCheck);              
+                 console.log("cp pipbgpiov1.js  to snp00/ pipbgpiov1.js");
+            exec('sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1.js', execCallbackNoCheck);  
+            
+            exec('sudo cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
             //exec('sudo npm install pigpio --prefix /home/pi/playbulb/snp00/', execCallbackNoCheck);              
                         
              //// Update Candle Code START
