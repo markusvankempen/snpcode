@@ -33,8 +33,9 @@ function execCallback(err, stdout, stderr) {
             
             // Update Networksetting
             console.log("Update Networksetting")
-            exec('sudo cp /home/pi/gitupdater/snpcode/dowork.sh  /home/pi/playbulb/snp00/',execCallbackNoCheck);
-             exec('sudo chomod /home/pi/playbulb/snp00//dowork.sh 777')
+             exec('sudo cp /home/pi/gitupdater/snpcode/dowork.sh  /home/pi/playbulb/snp00/',execCallbackNoCheck);
+             exec('sudo chmod 777 /home/pi/playbulb/snp00/dowork.sh')
+             exec('. /home/pi/playbulb/snp00/dowork.sh > /home/pi/playbulb/snp00/dowork.log')
           //  exec('sudo cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);
 /*
              console.log("Updateing script");
