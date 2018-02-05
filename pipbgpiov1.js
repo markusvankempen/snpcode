@@ -3,7 +3,7 @@
 ************************************************************************
 *
 * mvk@ca.ibm.com
-* adjustemts for SNP Workshop - 20171127v1
+* adjustemts for SNP Workshop - 20180204v3
 * added gpio pi functionality for GPIO21,21,16
 * GPIO21 =IR1, 21=IR2 (Breaker), LED1 GPIO16
 * 
@@ -18,7 +18,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20180128 -v101"
+var VERSION ="20180204 -v102"
 console.log(" PLAYBULB & GPIO - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
