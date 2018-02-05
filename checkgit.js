@@ -37,12 +37,12 @@ function execCallback(err, stdout, stderr) {
 
              console.log("Updateing script");
             
-             exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
-             exec('cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
-             exec('cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1-is-in-pipbiotv2.js', execCallbackNoCheck);              
-              exec('cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1.js', execCallbackNoCheck);  
-              exec('cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
-            exec('sudo npm install pigpio --prefix /home/pi/playbulb/snp00/', execCallbackNoCheck);              
+             exec('sudo mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
+             exec('sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
+             exec('sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1-is-in-pipbiotv2.js', execCallbackNoCheck);              
+              exec('sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1.js', execCallbackNoCheck);  
+              exec('sudo cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/', execCallbackNoCheck);  
+            //exec('sudo npm install pigpio --prefix /home/pi/playbulb/snp00/', execCallbackNoCheck);              
                         
              //// Update Candle Code START
           /*  
