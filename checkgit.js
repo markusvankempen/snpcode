@@ -33,8 +33,10 @@ function execCallback(err, stdout, stderr) {
             
             // Update Networksetting
             console.log("Update Networksetting")
-            exec('sudo cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);
-
+            exec('sudo cp /home/pi/gitupdater/snpcode/dowork.sh  /home/pi/playbulb/snp00/',execCallbackNoCheck);
+             exec('sudo chomod /home/pi/playbulb/snp00//dowork.sh 777')
+          //  exec('sudo cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);
+/*
              console.log("Updateing script");
             console.log("Backup old script pipbiotv2.js ");
              exec('sudo mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
@@ -49,7 +51,7 @@ function execCallback(err, stdout, stderr) {
             //exec('sudo npm install pigpio --prefix /home/pi/playbulb/snp00/', execCallbackNoCheck);              
                         
              //// Update Candle Code START
-          /*  
+          /
              console.log("cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js"+Date.now());
              exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
              exec('cp /home/pi/gitupdater/snpcode/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
