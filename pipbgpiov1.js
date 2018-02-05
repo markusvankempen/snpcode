@@ -18,7 +18,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20180205 -v105"
+var VERSION ="20180205-v1343"
 console.log(" PLAYBULB & GPIO - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
@@ -452,7 +452,7 @@ CandleDevice.discover(function(device) {
           if( isNaN(modeno) )
           modeno=0
 
-         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ir1":'+ir1.digitalRead()+',"ir2":'+ir2.digitalRead()+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
+         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ir1":'+ir1.digitalRead()+',"ir2":'+ir2.digitalRead()+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","version":"'+VERSION+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
 
         mqttClient.publish('ping', 'json', mqmsg,1);
          log(io,mqmsg);
