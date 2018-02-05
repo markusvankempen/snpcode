@@ -1,5 +1,4 @@
 var exec = require('child_process').exec;
-
 console.log('pulling snpcode from GitHub snpcode... mvk20170205 v8');
 console.log('Lets wait for 90 sec to get all other services online')
 exec('sleep 90', startwork);
