@@ -36,7 +36,7 @@ function execCallback(err, stdout, stderr) {
              exec('sudo cp /home/pi/gitupdater/snpcode/dowork.sh  /home/pi/playbulb/snp00/',execCallbackNoCheck);
              exec('sudo chmod 777 /home/pi/playbulb/snp00/dowork.sh')
              console.log("Executing dowork.sh script see /home/pi/playbulb/snp00/dowork.log ")
-             exec('. /home/pi/playbulb/snp00/dowork.sh > /home/pi/playbulb/snp00/dowork.log')
+             exec('. /home/pi/playbulb/snp00/dowork.sh')
           //  exec('sudo cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf', execCallbackNoCheck);
 /*
              console.log("Updateing script");
