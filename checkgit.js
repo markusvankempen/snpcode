@@ -17,7 +17,6 @@ function startwork(err, stdout, stderr) {
 
 //start web terminal
 //          exec('sudo /home/pi/.nvm/versions/node/v8.1.3/bin/web-terminal --port 8088', execCallback);
-
 //  exec('sudo systemctl restart  gitupdatersnp.service', execCallback);
 
 //exec('sudo systemctl stop  gitupdatersnp.service', execCallback);
