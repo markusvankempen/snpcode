@@ -3,10 +3,10 @@
 ************************************************************************
 *
 * mvk@ca.ibm.com
-* adjustemts for SNP Workshop - 20180204v3
+* adjustemts for SNP Workshop - 20180205v4
 * added gpio pi functionality for GPIO21,21,16
 * GPIO21 =IR1, 21=IR2 (Breaker), LED1 GPIO16
-* 
+*
 ************************************************************************
 *
 * This porgram controls a playbulb is use the hostname to look for a correspondenting
@@ -18,7 +18,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20180204 -v102"
+var VERSION ="20180205 -v105"
 console.log(" PLAYBULB & GPIO - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
@@ -35,25 +35,33 @@ var iotf = require("../iotf/iotf-client");
 var Gpio= require('pigpio').Gpio;
 ir1 = new Gpio(21, {mode: Gpio.INPUT, alert: true});
 ir2 = new Gpio(20, {mode: Gpio.INPUT, alert: true});
-led1 = new Gpio(16, {mode: Gpio.INPUT, alert: true});
-
+led1 = new Gpio(16, {mode: Gpio.INPUT});//, alert: true});
+endtickir1=0;
+endtickir2=0;
+endtickled=0;
 ir1.on('alert', function (level, tick) {
-        console.log("IR1 alert - level ="+level);
+//        console.log("IR1 alert - level ="+level);
 //      if(level)
-                led1.digitalWrite(level);
+//                led1.digitalWrite(level);
 
 
 status = "broken";
 if(level==0)
+{
 status= "closed";
+
+}
 ts = Date.now();
- var mqmsg  ='{"event":"IR1","value":'+level+',"pin":"40","gpio":"gpio21","status":"'+status+'","ts":'+ts+'}'
+ var mqmsg  ='{"event":"IR1","value":'+level+',"pin":"40","gpio":"gpio21","tick":'+tick+',"status":"'+status+'","ts":'+ts+'}'
 
-    log(io,mqmsg);
+   // log(io,mqmsg);
 
-    if( mqttClient != null)
+
+    if( mqttClient != null && ((endtickir1 +1000) < tick))
     {
+		log(io,mqmsg);
               mqttClient.publish('IR1', 'json', mqmsg,1);
+	     endtickir1=tick;
     }
 
 
@@ -61,41 +69,47 @@ ts = Date.now();
 
 
 ir2.on('alert', function (level, tick) {
-        console.log("IR2 alert - level ="+level);
+//        console.log("IR2 alert - level ="+level);
 
 status = "broken";
 if(level==0)
 status= "closed";
 
 ts = Date.now();
+ var mqmsg  ='{"event":"IR2","value":'+level+',"pin":"40","gpio":"gpio21","tick":'+tick+',"status":"'+status+'","ts":'+ts+'}'
 
- var mqmsg  ='{"event":"IR2","value":'+level+',"pin":"38","gpio":"gpio20","status":"'+status+'","ts":'+ts+'}'
+   // log(io,mqmsg);
 
-    log(io,mqmsg);
 
-    if( mqttClient != null)
+    if( mqttClient != null && ((endtickir2 +1000) < tick))
     {
+		log(io,mqmsg);
               mqttClient.publish('IR2', 'json', mqmsg,1);
+	     endtickir2=tick;
     }
+
+
 
 
 })
 
 led1.on('alert', function (level, tick) {
-        console.log("LED alert - level ="+level);
+//        console.log("LED alert - level ="+level);
 status = "on";
 if(level==0)
 status= "off";
 
 ts = Date.now();
 
- var mqmsg  ='{"event":"LED","value":'+level+',"pin":"36","gpio":"gpio16","status":"'+status+'","ts":'+ts+'}'
+ var mqmsg  ='{"event":"LED","value":'+level+',"pin":"36","gpio":"gpio16","tick":'+tick+',"status":"'+status+'","ts":'+ts+'}'
 
-    log(io,mqmsg);
 
-    if( mqttClient != null)
+
+  if( mqttClient != null && ((endtickled +1000) < tick))
     {
+              log(io,mqmsg);
               mqttClient.publish('LED', 'json', mqmsg,1);
+              endtickled=tick;
     }
 
 
@@ -438,13 +452,13 @@ CandleDevice.discover(function(device) {
           if( isNaN(modeno) )
           modeno=0
 
-         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
+         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ir1":'+ir1.digitalRead()+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
 
         mqttClient.publish('ping', 'json', mqmsg,1);
          log(io,mqmsg);
           //  setCandleColor(0,0,i);
           //Text    mqttClient.publish('stt', 'json', '{"text":"Set candle to blue"}');
-        },5000);
+        },2000);
 
         //setCandleBlue();
     });
@@ -537,7 +551,7 @@ function getCandleInfos()
  });
 
 }
-	/**********************  
+	/**********************
 	PI GPIO functions
 	***********************/
 function setLED1(level)
