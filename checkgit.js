@@ -40,7 +40,7 @@ function execCallback(err, stdout, stderr) {
              exec('mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.js'+Date.now(), execCallbackNoCheck);
              exec('cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbiotv2.js', execCallbackNoCheck);  
              exec('cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1-is-in-pipbiotv2.js', execCallbackNoCheck);              
-            
+             exec('npm install pigpio --prefix /home/pi/playbulb/snp00/', execCallbackNoCheck);              
                         
              //// Update Candle Code START
           /*  
