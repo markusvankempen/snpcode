@@ -16,6 +16,6 @@ echo "cp pipbgpiov1.js  to snp00/ pipbgpiov1.js"
 sudo cp /home/pi/gitupdater/snpcode/pipbgpiov1.js /home/pi/playbulb/snp00/pipbgpiov1.js
 echo "cp andle-service.js /home/pi/playbulb/lib/"          
 sudo cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/
-//sudo npm install pigpio --prefix /home/pi/playbulb/snp00/
-//sleep 30
-#sudo reboot
+sudo npm install pigpio --prefix /home/pi/playbulb/snp00/
+sleep 50
+sudo reboot
