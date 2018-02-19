@@ -17,7 +17,7 @@ echo "cp 7segmentv3.js  to snp00/ 7segmentv3.js"
 sudo cp /home/pi/gitupdater/snpcode/7segmentv3.js /home/pi/playbulb/snp00/7segmentv3.js
 echo "cp andle-service.js /home/pi/playbulb/lib/"          
 sudo cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/
-//sudo npm install pigpio --prefix /home/pi/playbulb/snp00/
+#sudo npm install pigpio --prefix /home/pi/playbulb/snp00/
 echo "Reboot in 60sec"
 sleep 30
 sudo reboot
