@@ -29,7 +29,7 @@ var draw = function(Gpio, pinA, pinB,  pinC,  pinD,  pinE,  pinF,  pinG , pinDP)
     var configG = new Gpio(pinG, {mode: Gpio.output});
     var configDP = new Gpio(pinDP, {mode: Gpio.output});
 
-	
+    //myblinky();	
 
     var drawReset = function() {
       configA.digitalWrite(ledOff);
@@ -94,6 +94,33 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
                             configF.digitalWrite(f);
                                     configG.digitalWrite(g);
                                               configDP.digitalWrite(dp);
+	var n=0;
+	if(a == 1 && b ==1 && c==1 && d==0 && e==0 && f ==0 && g==0)
+	{
+		n = 7;
+	}else if(a == 1 && b ==1 && c==1 && d==1 && e==1 && f ==1 && g==1){
+		n = 0;
+	}else if(a == 0 && b ==1 && c==1 && d==1 && e==1 && f ==1 && g==1){
+                n = 1;
+  }else if(a == 1 && b ==1 && c==0 && d==1 && e==1 && f ==0 && g==1){
+                n = 2;
+  }else if(a == 1 && b ==1 && c==1 && d==1 && e==0 && f ==0 && g==1){
+                n = 3;
+  }else if(a == 0 && b ==0 && c==1 && d==0 && e==0 && f ==1 && g==1){
+                n = 4;
+  }else if(a == 1 && b ==0 && c==0 && d==1 && e==0&& f ==0 && g==1){
+                n = 5;
+}else if(a == 0 && b ==0 && c==1 && d==1 && e==1 && f ==1 && g==1){
+                n = 6;
+}else if(a == 1 && b ==1 && c==1 && d==1 && e==1 && f ==1 && g==1){
+                n = 8;
+
+}else if(a == 1 && b ==1 && c==1 && d==1 && e==0 && f ==1 && g==1){
+                n = 9;
+        }
+	return(n);
+
+			
 
    }
 
@@ -133,11 +160,26 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
               } else if (i == 6) {
                	configF.digitalWrite(ledOn);
 		}
-
-
-
     }
 
+
+    var myblinky = function(){
+    var i = 0;
+
+        var myint = setInterval(function() {
+            runRefresh(i);
+            if(i>=6)
+                {
+                 clearInterval(myint);
+                         drawReset();
+                }
+            else
+                i++;
+        }, 250);
+ configDP.digitalWrite(ledOn);
+  }
+
+myblinky();
 //    this.
 
     this.rotate = function() {
@@ -148,11 +190,13 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
             if(i>=6)
 		{
             	 clearInterval(myint);
-			 drawReset();
+			 
+drawReset();
 		}
 	    else
 		i++;
-        }, 200);
+        }, 250);
+ configDP.digitalWrite(ledOn)
     }
 
     var blink =  function(number)
@@ -189,7 +233,7 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
 
     this.display = function(number) {
         drawReset();
-
+ var n=0;
         if (number == '0') {
                   configA.digitalWrite(ledOn);
                   configB.digitalWrite(ledOn);
@@ -201,8 +245,11 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
                 } else if (number == '1') {
                       configB.digitalWrite(ledOn);
                       configC.digitalWrite(ledOn);
-                } else if (number == '2') {
-                  configA.digitalWrite(ledOn);
+ 	 n=1;         
+       } else if (number == '2') {
+        
+ n=2;
+          configA.digitalWrite(ledOn);
                   configB.digitalWrite(ledOn);
 
                   configD.digitalWrite(ledOn);
@@ -210,13 +257,14 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
 
                   configG.digitalWrite(ledOn);
                    } else if (number == '3') {
-                     configA.digitalWrite(ledOn);
+ n=3;    
+                 configA.digitalWrite(ledOn);
                      configB.digitalWrite(ledOn);
                      configC.digitalWrite(ledOn);
                      configD.digitalWrite(ledOn);
                      configG.digitalWrite(ledOn);
                    } else if (number == '4') {
-
+ n=4;
                      configB.digitalWrite(ledOn);
                      configC.digitalWrite(ledOn);
                     configF.digitalWrite(ledOn);
@@ -224,7 +272,7 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
 
                     } else if (number == '5') {
                       configA.digitalWrite(ledOn);
-
+ n=5;
                       configC.digitalWrite(ledOn);
                       configD.digitalWrite(ledOn);
 
@@ -232,18 +280,20 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
                       configG.digitalWrite(ledOn);
                     } else if (number == '6') {
                       configA.digitalWrite(ledOn);
-
+ n=6;
                       configC.digitalWrite(ledOn);
                       configD.digitalWrite(ledOn);
                       configE.digitalWrite(ledOn);
                       configF.digitalWrite(ledOn);
                       configG.digitalWrite(ledOn);
                   } else if (number == '7') {
-                    configA.digitalWrite(ledOn);
+ n=7;    
+                configA.digitalWrite(ledOn);
                     configB.digitalWrite(ledOn);
                     configC.digitalWrite(ledOn);
                      } else if (number == '8') {
-                       configA.digitalWrite(ledOn);
+ n=8;    
+                   configA.digitalWrite(ledOn);
                        configB.digitalWrite(ledOn);
                        configC.digitalWrite(ledOn);
                        configD.digitalWrite(ledOn);
@@ -251,7 +301,8 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
                        configF.digitalWrite(ledOn);
                        configG.digitalWrite(ledOn);
                    } else if (number == '9') {
-                     configA.digitalWrite(ledOn);
+ n=9;    
+                 configA.digitalWrite(ledOn);
                      configB.digitalWrite(ledOn);
                      configC.digitalWrite(ledOn);
                      configD.digitalWrite(ledOn);
@@ -260,7 +311,9 @@ console.log(">>>>>>>> setting All LED "+a+b+c+d+e+f+g+dp);
                      configG.digitalWrite(ledOn);
         } else if (number == '.') {
                 configDP.digitalWrite(ledOn);
-        }
+ 
+       }
+return n;
     };
 };
 
