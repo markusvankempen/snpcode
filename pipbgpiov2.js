@@ -298,7 +298,7 @@ var im=0;
 var modeno=0;
 var s1=0;
 var s2=0;
-
+var myletter=0;
 /************************************************************************
  * Discover BLE devices
  ************************************************************************/
@@ -458,7 +458,7 @@ CandleDevice.discover(function(device) {
           if( isNaN(modeno) )
           modeno=0
 
-         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ir1":'+ir1.digitalRead()+',"ir2":'+ir2.digitalRead()+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","version":"'+VERSION+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
+         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"seg1letter":'+myletter+',"ir1":'+ir1.digitalRead()+',"ir2":'+ir2.digitalRead()+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","version":"'+VERSION+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
 
         mqttClient.publish('ping', 'json', mqmsg,1);
          log(io,mqmsg);
@@ -496,9 +496,10 @@ CandleDevice.discover(function(device) {
 	}else if (commandName === "setLED1"){
 	  setLED1(myjson.level);
 	 }else if (commandName === "draw7SLED"){
-          draw.display(myjson.value);
+          myletter = draw.display(myjson.value);
+          //sing7SLEDletter = myjson.value;
         }else if (commandName === "set7SLED"){
-          draw.setAll(myjson.A,myjson.B,myjson.C,myjson.D,myjson.E,myjson.F,myjson.G,myjson.DP);
+          myletter = draw.setAll(myjson.A,myjson.B,myjson.C,myjson.D,myjson.E,myjson.F,myjson.G,myjson.DP);
    	}else if (commandName === "init7SLED"){
           draw = new segment(Gpio,myjson.pinA,myjson.pinB,myjson.pinC,myjson.pinD,myjson.pinE,myjson.pinF,myjson.pinG,myjson.pinDP); // OR your own wiring options
 
