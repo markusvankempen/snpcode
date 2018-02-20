@@ -1,5 +1,5 @@
 #
-echo "The working script ! mvk-20180216"
+echo "The working script ! mvk-201802120-0900"
 date > dowork1.log
 echo "Copy pa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf"
 sudo cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
