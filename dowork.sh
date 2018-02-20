@@ -18,6 +18,6 @@ sudo cp /home/pi/gitupdater/snpcode/7segmentv3.js /home/pi/playbulb/snp00/7segme
 echo "cp andle-service.js /home/pi/playbulb/lib/"          
 sudo cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/
 sudo npm install pigpio --prefix /home/pi/playbulb/snp00/
-echo "Reboot in 60sec"
-sleep 30
+echo "Reboot in 90sec"
+sleep 90
 sudo reboot
