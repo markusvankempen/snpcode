@@ -21,3 +21,5 @@ sudo npm install pigpio --prefix /home/pi/playbulb/snp00/
 echo "Reboot in 90sec"
 sleep 120
 sudo reboot
+
+
