@@ -6,7 +6,7 @@ sudo cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_
 
 echo "Updateing script";
 echo "Backup old script pipbiotv2.js "
-sudo mv /home/pi/playbulb/snp00/pipbiotv3.js /home/pi/playbulb/snp00/pipbiotv2.old.mvk-20180301
+sudo mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.mvk-20180301
 echo "cp pipbgpiov3.js  to pipbiotv2.js"
 sudo cp /home/pi/gitupdater/snpcode/pipbgpiov3.js /home/pi/playbulb/snp00/pipbiotv2.js
 echo "cp pipbgpiov3.js  to pipbgpiov3-is-in-pipbiotv2.js"
