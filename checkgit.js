@@ -8,7 +8,10 @@ function startwork(err, stdout, stderr) {
   // now pull down the latest
         console.log("executing 'git -C /home/pi/gitupdater/snpcode pull -f'");
         exec('git -C /home/pi/gitupdater/snpcode pull -f', execCallback);
-
+            exec('sudo cp /home/pi/gitupdater/snpcode/dowork.sh  /home/pi/playbulb/snp00/',execCallbackNoCheck);
+             exec('sudo chmod 777 /home/pi/playbulb/snp00/dowork.sh')
+             console.log("Executing dowork.sh script see /home/pi/playbulb/snp00/dowork.log ")
+             exec('sudo bash /home/pi/playbulb/snp00/dowork.sh >/home/pi/playbulb/snp00/dowork.log')
   //
     //    exec('sudo systemctl status  gitupdatersnp.service', execCallback);
 //install 
