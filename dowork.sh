@@ -19,5 +19,5 @@ echo "cp candle-service.js /home/pi/playbulb/lib/"
 sudo cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/
 sudo npm install pigpio --prefix /home/pi/playbulb/snp00/
 echo "Reboot in 90sec"
-sleep 30
+sleep 10
 sudo reboot
