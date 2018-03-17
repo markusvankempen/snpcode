@@ -19,7 +19,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20180301-v1157"
+var VERSION ="20180317-v1657"
 console.log(" PLAYBULB & GPIO - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
