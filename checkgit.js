@@ -35,6 +35,7 @@ function execCallback(err, stdout, stderr) {
             
             // Update Networksetting
             console.log("Update Networksetting")
+              exec('sudo rm /home/pi/playbulb/snp00/dowork.sh');
              exec('sudo cp /home/pi/gitupdater/snpcode/dowork.sh  /home/pi/playbulb/snp00/',execCallbackNoCheck);
              exec('sudo chmod 777 /home/pi/playbulb/snp00/dowork.sh')
              console.log("Executing dowork.sh script see /home/pi/playbulb/snp00/dowork.log ")
