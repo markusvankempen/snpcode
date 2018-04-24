@@ -3,11 +3,11 @@
 ************************************************************************
 *
 * mvk@ca.ibm.com
-* adjustemts for SNP Workshop - 20180205v4
+* adjustemts for SNP Workshop - 20180425v5
 * added gpio pi functionality for GPIO21,21,16
 * GPIO21 =IR1, 21=IR2 (Breaker), LED1 GPIO16
 * added support for 7-Segment Singel LED/LCD
-*
+* added support for servo on GIPIO 4
 ************************************************************************
 *
 * This porgram controls a playbulb is use the hostname to look for a correspondenting
@@ -19,7 +19,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20180219-v1543"
+var VERSION ="20180424-v1350"
 console.log(" PLAYBULB & GPIO - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
@@ -42,6 +42,15 @@ var draw = new segment(Gpio,17,4, 23, 24, 25, 27, 22, 18); // OR your own wiring
 ir1 = new Gpio(21, {mode: Gpio.INPUT, alert: true});
 ir2 = new Gpio(20, {mode: Gpio.INPUT, alert: true});
 led1 = new Gpio(16, {mode: Gpio.INPUT});//, alert: true});
+gpio5 = new Gpio(5, {mode: Gpio.OUTPUT});
+gpio6 = new Gpio(6, {mode: Gpio.OUTPUT});
+gpio13 = new Gpio(13, {mode: Gpio.OUTPUT});
+gpio19 = new Gpio(19, {mode: Gpio.OUTPUT});
+gpio26 = new Gpio(26, {mode: Gpio.OUTPUT});
+gpio12 = new Gpio(12, {mode: Gpio.INPUT});
+
+motor = new Gpio(4, {mode: Gpio.INPUT});
+
 endtickir1=0;
 endtickir2=0;
 endtickled=0;
@@ -299,6 +308,7 @@ var modeno=0;
 var s1=0;
 var s2=0;
 var myletter=0;
+var seg1letter=' ';
 /************************************************************************
  * Discover BLE devices
  ************************************************************************/
@@ -458,7 +468,13 @@ CandleDevice.discover(function(device) {
           if( isNaN(modeno) )
           modeno=0
 
-         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"seg1letter":'+myletter+',"ir1":'+ir1.digitalRead()+',"ir2":'+ir2.digitalRead()+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","version":"'+VERSION+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
+
+	  if ( myletter == null || (typeof myletter !== "undefined"))
+		myletter='#';
+
+         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+
+        '","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+
+        ',"seg1letter":"'+myletter+'","ir1":'+ir1.digitalRead()+',"ir2":'+ir2.digitalRead()+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","version":"'+VERSION+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
 
         mqttClient.publish('ping', 'json', mqmsg,1);
          log(io,mqmsg);
@@ -493,13 +509,23 @@ CandleDevice.discover(function(device) {
           setLED1(1);
   	}else if (commandName === "setLED1off"){
           setLED1(0);
+        }else if (commandName === "setGPIOon"){
+          setGPIO(myjson.gpio,1);
+       }else if (commandName === "setGPIOoff"){
+          setGPIO(myjson.gpio,0);
+
 	}else if (commandName === "setLED1"){
 	  setLED1(myjson.level);
 	 }else if (commandName === "draw7SLED"){
           myletter = draw.display(myjson.value);
+         }else if (commandName === "rotate7SLED"){
+
+          myletter = '@'
+	  draw.rotate();
           //sing7SLEDletter = myjson.value;
         }else if (commandName === "set7SLED"){
           myletter = draw.setAll(myjson.A,myjson.B,myjson.C,myjson.D,myjson.E,myjson.F,myjson.G,myjson.DP);
+	  myletter = '*'
    	}else if (commandName === "init7SLED"){
           draw = new segment(Gpio,myjson.pinA,myjson.pinB,myjson.pinC,myjson.pinD,myjson.pinE,myjson.pinF,myjson.pinG,myjson.pinDP); // OR your own wiring options
 
@@ -511,7 +537,39 @@ CandleDevice.discover(function(device) {
             setCandleColor(0,0,255);
         } else if(commandName === "setColor") {
             setCandleColor(myjson.rr,myjson.gg,myjson.bb);
-        }else {
+
+ } else if (commandName === "armFORWARD") {
+      console.log("armForward = 2000");
+      motor.servoWrite(1600); //open
+
+    } else if(commandName === "armUP") {
+      console.log("armUP = 1000 ");
+      motor.servoWrite(1000); //open
+
+    } else if(commandName === "armBACK") {
+   console.log("armBACK = 500") ;
+    motor.servoWrite(500); //open
+
+    } else if(commandName === "armMOVE") {
+        console.log("armMove");
+        console.log("armMove value = "+myjson.d.motorSpin);
+        motor.servoWrite(myjson.d.motorSpin); //open
+
+    } else if(commandName === "armWAVE") {
+
+     console.log("armWave");
+
+     motor.servoWrite(1200);
+     sleep(300)
+     motor.servoWrite(2000);
+     sleep(400);
+     motor.servoWrite(1200);
+     sleep(300)
+     motor.servoWrite(2000);
+     sleep(400);
+     motor.servoWrite(1200);
+
+}else {
             log(io,"Command not supported.. " + commandName);
         }
     }); //Command
@@ -570,12 +628,48 @@ function getCandleInfos()
 	/**********************
 	PI GPIO functions
 	***********************/
+function setGPIO(gpio,level)
+{
+	switch(gpio)
+	{
+        case 5:
+		gpio5.digitalWrite(level);
+                break;
+
+	case 6:
+  		gpio6.digitalWrite(level);
+		break;
+	case 13:
+		gpio13.digitalWrite(level);
+		break;
+        case 19:
+  		gpio19.digitalWrite(level);
+		break;
+
+      	case 26:
+		console.log(">>>>> SetGPIO26 to "+level)
+		gpio26.digitalWrite(level);
+                break;
+	default:
+//"GPIO port "+gpio+" no supported
+	msg = "GPIO port "+gpio+" no supported";
+
+  	var mqmsg  ='{"event":"ERROR","cmd":"setGPIO","message":"'+msg+'"}'
+
+        mqttClient.publish('error', 'json', mqmsg,1);
+        log(io,mqmsg);
+	break;
+	}
+}
+
 function setLED1(level)
 {
 	led1.digitalWrite(level);
 }
 
-function setGPIO(gpio,level)
+///####
+var mygpio;
+function setNewGPIO(gpio,level)
 {
 mygpio = new Gpio(gpio, {mode: Gpio.INPUT, alert: true});
 mygpio.digitalWrite(level);
