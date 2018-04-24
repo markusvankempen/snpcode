@@ -3,11 +3,11 @@
 ************************************************************************
 *
 * mvk@ca.ibm.com
-* adjustemts for SNP Workshop - 20180205v4
+* adjustemts for SNP Workshop - 20180425v5
 * added gpio pi functionality for GPIO21,21,16
 * GPIO21 =IR1, 21=IR2 (Breaker), LED1 GPIO16
 * added support for 7-Segment Singel LED/LCD
-*
+* added support for servo on GIPIO 4
 ************************************************************************
 *
 * This porgram controls a playbulb is use the hostname to look for a correspondenting
@@ -19,7 +19,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20180317-v1657"
+var VERSION ="20180424-v1350"
 console.log(" PLAYBULB & GPIO - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
@@ -43,12 +43,13 @@ ir1 = new Gpio(21, {mode: Gpio.INPUT, alert: true});
 ir2 = new Gpio(20, {mode: Gpio.INPUT, alert: true});
 led1 = new Gpio(16, {mode: Gpio.INPUT});//, alert: true});
 gpio5 = new Gpio(5, {mode: Gpio.OUTPUT});
-gpio6 = new Gpio(5, {mode: Gpio.OUTPUT});
+gpio6 = new Gpio(6, {mode: Gpio.OUTPUT});
 gpio13 = new Gpio(13, {mode: Gpio.OUTPUT});
 gpio19 = new Gpio(19, {mode: Gpio.OUTPUT});
 gpio26 = new Gpio(26, {mode: Gpio.OUTPUT});
 gpio12 = new Gpio(12, {mode: Gpio.INPUT});
 
+motor = new Gpio(4, {mode: Gpio.INPUT});
 
 endtickir1=0;
 endtickir2=0;
@@ -307,7 +308,7 @@ var modeno=0;
 var s1=0;
 var s2=0;
 var myletter=0;
-var seg1letter=' '; 
+var seg1letter=' ';
 /************************************************************************
  * Discover BLE devices
  ************************************************************************/
@@ -518,8 +519,8 @@ CandleDevice.discover(function(device) {
 	 }else if (commandName === "draw7SLED"){
           myletter = draw.display(myjson.value);
          }else if (commandName === "rotate7SLED"){
-	
-          myletter = '@' 
+
+          myletter = '@'
 	  draw.rotate();
           //sing7SLEDletter = myjson.value;
         }else if (commandName === "set7SLED"){
@@ -536,7 +537,39 @@ CandleDevice.discover(function(device) {
             setCandleColor(0,0,255);
         } else if(commandName === "setColor") {
             setCandleColor(myjson.rr,myjson.gg,myjson.bb);
-        }else {
+
+ } else if (commandName === "armFORWARD") {
+      console.log("armForward = 2000");
+      motor.servoWrite(1600); //open
+
+    } else if(commandName === "armUP") {
+      console.log("armUP = 1000 ");
+      motor.servoWrite(1000); //open
+
+    } else if(commandName === "armBACK") {
+   console.log("armBACK = 500") ;
+    motor.servoWrite(500); //open
+
+    } else if(commandName === "armMOVE") {
+        console.log("armMove");
+        console.log("armMove value = "+myjson.d.motorSpin);
+        motor.servoWrite(myjson.d.motorSpin); //open
+
+    } else if(commandName === "armWAVE") {
+
+     console.log("armWave");
+
+     motor.servoWrite(1200);
+     sleep(300)
+     motor.servoWrite(2000);
+     sleep(400);
+     motor.servoWrite(1200);
+     sleep(300)
+     motor.servoWrite(2000);
+     sleep(400);
+     motor.servoWrite(1200);
+
+}else {
             log(io,"Command not supported.. " + commandName);
         }
     }); //Command
@@ -602,8 +635,8 @@ function setGPIO(gpio,level)
         case 5:
 		gpio5.digitalWrite(level);
                 break;
-        
-	case 6:	
+
+	case 6:
   		gpio6.digitalWrite(level);
 		break;
 	case 13:
@@ -620,7 +653,7 @@ function setGPIO(gpio,level)
 	default:
 //"GPIO port "+gpio+" no supported
 	msg = "GPIO port "+gpio+" no supported";
-	
+
   	var mqmsg  ='{"event":"ERROR","cmd":"setGPIO","message":"'+msg+'"}'
 
         mqttClient.publish('error', 'json', mqmsg,1);
