@@ -20,7 +20,9 @@ sudo cp /home/pi/gitupdater/snpcode/candle-service.js /home/pi/playbulb/lib/
 #npm install pigpio --prefix /home/pi/playbulb/snp00/
 echo "Install EV3"
 mkdir /home/pi/EV3
-echo " /home/pi/gitupdater/snpcode/python/*.py  /home/pi/EV3/"
+rm *
+echo "cp /home/pi/gitupdater/snpcode/python/*.py  /home/pi/EV3/"
+cp /home/pi/gitupdater/snpcode/python/*.py  /home/pi/EV3/
 echo "Reboot in 90sec"
 #sleep 600
 #sudo reboot
