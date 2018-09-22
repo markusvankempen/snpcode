@@ -1,0 +1,8 @@
+{
+  "org": "5q6gu4",
+≈  "domain": "internetofthings.ibmcloud.com",
+  "type": "playbulb",
+  "id": "playbulb22",
+  "auth-method" : "token",
+  "auth-token" : "playbulb22"
+}
