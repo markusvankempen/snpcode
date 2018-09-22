@@ -4,6 +4,7 @@ date > dowork1.log
 echo "Copy pa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf"
 sudo cp /home/pi/gitupdater/snpcode/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 sudo rm  /var/log/particle-agent.log
+sudo cp /home/pi/gitupdater/snpcode/configfiles/*  /home/pi/playbulb/snp00/
 echo "Updateing script";
 echo "Backup old script pipbiotv2.js "
 sudo mv /home/pi/playbulb/snp00/pipbiotv2.js /home/pi/playbulb/snp00/pipbiotv2.old.mvk-20180301
