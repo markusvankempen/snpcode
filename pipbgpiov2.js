@@ -1,13 +1,14 @@
 /************************************************************************
-* Copyright 2016 IBM Corp. All Rights Reserved.
+* Copyright 2018 IBM Corp. All Rights Reserved.
 ************************************************************************
 *
 * mvk@ca.ibm.com
-* adjustemts for SNP Workshop - 20180425v5
+* adjustemts for SNP Workshop - 20180922v101
 * added gpio pi functionality for GPIO21,21,16
 * GPIO21 =IR1, 21=IR2 (Breaker), LED1 GPIO16
 * added support for 7-Segment Singel LED/LCD
 * added support for servo on GIPIO 4
+* added pi cam support
 ************************************************************************
 *
 * This porgram controls a playbulb is use the hostname to look for a correspondenting
@@ -19,7 +20,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20180424-v1350"
+var VERSION ="20180922-v101"
 console.log(" PLAYBULB & GPIO - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
@@ -29,6 +30,116 @@ function shutdown(callback){
     exec('shutdown -r now', function(error, stdout, stderr){ callback(stdout); });
 }
 
+/************** CAMERA **********************/
+var RaspiCam = require("./node-raspicam/lib/raspicam");
+
+  var fs = require('fs')
+
+var camera = new RaspiCam({
+        mode: "photo",
+        output: "image.jpg",
+//      encoding: "jpg",
+        timeout: 1, // take the picture immediately
+        nopreview: true,
+//        vflip: false,
+//	hflip: false,
+	width: 640,
+	height: 480
+
+});
+
+console.log(camera)
+
+var t1
+var t2
+camera.on("start", function( err, timestamp ){
+        t1=timestamp
+        console.log("photo started at " + timestamp );
+});
+
+camera.on("read", function( err, timestamp, filename ){
+//         console.log("captured" + timestamp );
+	pictime = ((timestamp-t1)/1000).toFixed(4)
+        console.log("It took:"+(timestamp-t1)/1000)
+        console.log("photo image captured with filename: " + filename );
+
+
+
+ ts = Date.now();
+ var mqmsg  ='{"event":"tookpicture","status":"start","time": '+pictime+',"filename":"'+filename+'","ts":'+ts+'}'
+
+    if( mqttClient != null)
+    {
+               
+              mqttClient.publish('tookpicture', 'json', mqmsg,1);
+               log(io,mqmsg);
+    }
+
+
+  console.log("Reading file");
+    fs.readFile(filename, 'base64',function (err, content) {
+      if (err) {
+            console.log(err);
+
+      } else {
+
+        mytpe =  'image/jpg'
+        myname = filename
+        pkgsize = 50000
+        mylen = content.toString().length
+        pkgsend = 0
+        data = ""
+        wmylen = content.toString().length
+        startlen = 0
+        pkg=1
+        console.log( wmylen );
+        while(0 < wmylen)
+        {
+
+        if(wmylen >pkgsize){
+  console.log("startlen:"+startlen+" pkgsize:"+pkgsize);
+          data = content.substr(startlen,pkgsize)
+          console.log(data.length)
+          startlen=startlen+pkgsize
+          wmylen= wmylen - pkgsize
+        }else {
+          data = content.substr(startlen,wmylen)
+          startlen=startlen+wmylen
+            console.log(data.length)
+          wmylen=0
+
+        }
+
+  console.log("IN length:"+mylen+" sizeleft:"+data.length+" pkg:"+pkg)
+  imgmsg = '{"event":"image","cnt":'+wmylen+',"length":'+mylen+',"name":"'+myname+ '","pkgs":'+pkg+ ',"pkgsize":'+data.length+ ' ,"data":"'+data+ '" }'
+
+    if( mqttClient != null)
+    {
+		
+              mqttClient.publish('tookpicture', 'json', imgmsg,1);
+		// log(io,imgmsg);
+    }
+
+     pkg++;
+    }//while
+
+   // log(io,mqmsg);
+
+
+ 
+
+      }//if
+    });//readfile
+
+});
+
+camera.on("exit", function( timestamp ){
+        console.log("photo child process has exited at " + timestamp );
+});
+
+
+
+/*******************************************/
 
 var iotf = require("../iotf/iotf-client");
 
@@ -568,6 +679,38 @@ CandleDevice.discover(function(device) {
      motor.servoWrite(2000);
      sleep(400);
      motor.servoWrite(1200);
+
+    } else if(commandName === "startpicture") {
+/*
+
+	RaspiCam {
+  opts: 
+   { mode: 'photo',
+     output: 'image.jpg',
+     timeout: 0,
+     nopreview: true,
+     vflip: false,
+     hflip: false,
+     width: 640,
+     height: 480,
+     log: [Function: bound consoleCall] },
+  filename: 'image.jpg',
+  filepath: './',
+*/
+ 	camera.opts.width = myjson.width;
+	camera.opts.height = myjson.height;
+ 	if(myjson.hflip)
+ 		camera.opts.hflip = myjson.hflip;
+	else
+		delete camera.opts.hflip
+        //camera.opts.vflip = myjson.vflip;
+	console.log(camera)	
+	camera.start();
+	
+    } else if(commandName === "stoppicture") {
+
+      
+	camera.stop();
 
 }else {
             log(io,"Command not supported.. " + commandName);
