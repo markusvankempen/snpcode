@@ -3,7 +3,7 @@
 ************************************************************************
 *
 * mvk@ca.ibm.com
-* adjustemts for SNP Workshop - 20180922v101
+* adjustemts for SNP Workshop - 20180922v101=2
 * added gpio pi functionality for GPIO21,21,16
 * GPIO21 =IR1, 21=IR2 (Breaker), LED1 GPIO16
 * added support for 7-Segment Singel LED/LCD
@@ -20,7 +20,7 @@
 *
 ************************************************************************
 */
-var VERSION ="20180922-v101"
+var VERSION ="20180922-v102"
 console.log(" PLAYBULB & GPIO - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
@@ -70,7 +70,7 @@ camera.on("read", function( err, timestamp, filename ){
 
     if( mqttClient != null)
     {
-               
+
               mqttClient.publish('tookpicture', 'json', mqmsg,1);
                log(io,mqmsg);
     }
@@ -115,8 +115,8 @@ camera.on("read", function( err, timestamp, filename ){
 
     if( mqttClient != null)
     {
-		
-              mqttClient.publish('tookpicture', 'json', imgmsg,1);
+
+              mqttClient.publish('picture', 'json', imgmsg,1);
 		// log(io,imgmsg);
     }
 
@@ -126,7 +126,7 @@ camera.on("read", function( err, timestamp, filename ){
    // log(io,mqmsg);
 
 
- 
+
 
       }//if
     });//readfile
@@ -684,7 +684,7 @@ CandleDevice.discover(function(device) {
 /*
 
 	RaspiCam {
-  opts: 
+  opts:
    { mode: 'photo',
      output: 'image.jpg',
      timeout: 0,
@@ -704,12 +704,12 @@ CandleDevice.discover(function(device) {
 	else
 		delete camera.opts.hflip
         //camera.opts.vflip = myjson.vflip;
-	console.log(camera)	
+	console.log(camera)
 	camera.start();
-	
+
     } else if(commandName === "stoppicture") {
 
-      
+
 	camera.stop();
 
 }else {
