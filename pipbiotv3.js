@@ -3,7 +3,12 @@
 ************************************************************************
 *
 * mvk@ca.ibm.com
-* adjustemts for SNP Workshop - 20171127v1
+* adjustemts for SNP Workshop - 20180922v101
+* added gpio pi functionality for GPIO21,21,16
+* GPIO21 =IR1, 21=IR2 (Breaker), LED1 GPIO16
+* added support for 7-Segment Singel LED/LCD
+* added support for servo on GIPIO 4
+* added pi camera support
 ************************************************************************
 *
 * This porgram controls a playbulb is use the hostname to look for a correspondenting
@@ -15,8 +20,8 @@
 *
 ************************************************************************
 */
-var VERSION ="20171127-v2"
-console.log(" PLAYBULB - version " +VERSION)
+var VERSION ="20180922-v101"
+console.log(" PLAYBULB & GPIO - version " +VERSION)
 // Require child_process
 var exec = require('child_process').exec;
 
@@ -25,8 +30,218 @@ function shutdown(callback){
     exec('shutdown -r now', function(error, stdout, stderr){ callback(stdout); });
 }
 
+/************** CAMERA **********************/
+var RaspiCam = require("./node-raspicam/lib/raspicam");
 
-  var iotf = require("../iotf/iotf-client");
+  var fs = require('fs')
+
+var camera = new RaspiCam({
+        mode: "photo",
+        output: "image.jpg",
+//      encoding: "jpg",
+        timeout: 1, // take the picture immediately
+        nopreview: true,
+//        vflip: false,
+//	hflip: false,
+	width: 640,
+	height: 480
+
+});
+
+console.log(camera)
+
+var t1
+var t2
+camera.on("start", function( err, timestamp ){
+        t1=timestamp
+        console.log("photo started at " + timestamp );
+});
+
+camera.on("read", function( err, timestamp, filename ){
+//         console.log("captured" + timestamp );
+	pictime = ((timestamp-t1)/1000).toFixed(4)
+        console.log("It took:"+(timestamp-t1)/1000)
+        console.log("photo image captured with filename: " + filename );
+
+
+
+ ts = Date.now();
+ var mqmsg  ='{"event":"tookpicture","status":"start","time": '+pictime+',"filename":"'+filename+'","ts":'+ts+'}'
+
+    if( mqttClient != null)
+    {
+               
+              mqttClient.publish('tookpicture', 'json', mqmsg,1);
+               log(io,mqmsg);
+    }
+
+
+  console.log("Reading file");
+    fs.readFile(filename, 'base64',function (err, content) {
+      if (err) {
+            console.log(err);
+
+      } else {
+
+        mytpe =  'image/jpg'
+        myname = filename
+        pkgsize = 50000
+        mylen = content.toString().length
+        pkgsend = 0
+        data = ""
+        wmylen = content.toString().length
+        startlen = 0
+        pkg=1
+        console.log( wmylen );
+        while(0 < wmylen)
+        {
+
+        if(wmylen >pkgsize){
+  console.log("startlen:"+startlen+" pkgsize:"+pkgsize);
+          data = content.substr(startlen,pkgsize)
+          console.log(data.length)
+          startlen=startlen+pkgsize
+          wmylen= wmylen - pkgsize
+        }else {
+          data = content.substr(startlen,wmylen)
+          startlen=startlen+wmylen
+            console.log(data.length)
+          wmylen=0
+
+        }
+
+  console.log("IN length:"+mylen+" sizeleft:"+data.length+" pkg:"+pkg)
+  imgmsg = '{"event":"image","cnt":'+wmylen+',"length":'+mylen+',"name":"'+myname+ '","pkgs":'+pkg+ ',"pkgsize":'+data.length+ ' ,"data":"'+data+ '" }'
+
+    if( mqttClient != null)
+    {
+		
+              mqttClient.publish('tookpicture', 'json', imgmsg,1);
+		// log(io,imgmsg);
+    }
+
+     pkg++;
+    }//while
+
+   // log(io,mqmsg);
+
+
+ 
+
+      }//if
+    });//readfile
+
+});
+
+camera.on("exit", function( timestamp ){
+        console.log("photo child process has exited at " + timestamp );
+});
+
+
+
+/*******************************************/
+
+var iotf = require("../iotf/iotf-client");
+
+/******************** PI stuff ***************/
+var Gpio= require('pigpio').Gpio;
+var segment = require('./7segmentv3'); // 7-segment LED
+var draw = new segment(Gpio,17,4, 23, 24, 25, 27, 22, 18); // OR your own wiring options
+//LED use default setting
+//See   diagram
+//https://github.com/sketchthat/7-segment-node
+ir1 = new Gpio(21, {mode: Gpio.INPUT, alert: true});
+ir2 = new Gpio(20, {mode: Gpio.INPUT, alert: true});
+led1 = new Gpio(16, {mode: Gpio.INPUT});//, alert: true});
+gpio5 = new Gpio(5, {mode: Gpio.OUTPUT});
+gpio6 = new Gpio(6, {mode: Gpio.OUTPUT});
+gpio13 = new Gpio(13, {mode: Gpio.OUTPUT});
+gpio19 = new Gpio(19, {mode: Gpio.OUTPUT});
+gpio26 = new Gpio(26, {mode: Gpio.OUTPUT});
+gpio12 = new Gpio(12, {mode: Gpio.INPUT});
+
+motor = new Gpio(4, {mode: Gpio.INPUT});
+
+endtickir1=0;
+endtickir2=0;
+endtickled=0;
+ir1.on('alert', function (level, tick) {
+//        console.log("IR1 alert - level ="+level);
+//      if(level)
+//                led1.digitalWrite(level);
+
+
+status = "broken";
+if(level==0)
+{
+status= "closed";
+
+}
+ts = Date.now();
+ var mqmsg  ='{"event":"IR1","value":'+level+',"pin":"40","gpio":"gpio21","tick":'+tick+',"status":"'+status+'","ts":'+ts+'}'
+
+   // log(io,mqmsg);
+
+
+    if( mqttClient != null && ((endtickir1 +1000) < tick))
+    {
+		log(io,mqmsg);
+              mqttClient.publish('IR1', 'json', mqmsg,1);
+	     endtickir1=tick;
+    }
+
+
+})
+
+
+ir2.on('alert', function (level, tick) {
+//        console.log("IR2 alert - level ="+level);
+
+status = "broken";
+if(level==0)
+status= "closed";
+
+ts = Date.now();
+ var mqmsg  ='{"event":"IR2","value":'+level+',"pin":"40","gpio":"gpio21","tick":'+tick+',"status":"'+status+'","ts":'+ts+'}'
+
+   // log(io,mqmsg);
+
+
+    if( mqttClient != null && ((endtickir2 +1000) < tick))
+    {
+		log(io,mqmsg);
+              mqttClient.publish('IR2', 'json', mqmsg,1);
+	     endtickir2=tick;
+    }
+
+
+
+
+})
+
+led1.on('alert', function (level, tick) {
+//        console.log("LED alert - level ="+level);
+status = "on";
+if(level==0)
+status= "off";
+
+ts = Date.now();
+
+ var mqmsg  ='{"event":"LED","value":'+level+',"pin":"36","gpio":"gpio16","tick":'+tick+',"status":"'+status+'","ts":'+ts+'}'
+
+
+
+  if( mqttClient != null && ((endtickled +1000) < tick))
+    {
+              log(io,mqmsg);
+              mqttClient.publish('LED', 'json', mqmsg,1);
+              endtickled=tick;
+    }
+
+
+})
+
+/*****************************************/
 
 /// IP address
 
@@ -35,7 +250,7 @@ function shutdown(callback){
       address
       // Provides a few basic operating-system related utility functions (built-in)
       ,os = require('os')
-      // Network interfaces
+      // Network inter∑faces
       ,ifaces = os.networkInterfaces();
 
   function internalIP()
@@ -142,6 +357,10 @@ var CandleDevice = function(device) {
 CandleDevice.is = function(device) {
   var localName = device.advertisement.localName;
   log(io," id: " +device.id + " name: "+localName);
+
+  if (idOrLocalName === undefined)
+	idOrLocalName = myhostname
+
   return (device.id === idOrLocalName || localName === idOrLocalName || localName === myhostname  );
 };
 
@@ -172,11 +391,17 @@ function hexToBytes(hex) {
     };
 
 function bytesToHex (bytes) {
+try{
         for (var hex = [], i = 0; i < bytes.length; i++) {
             hex.push((bytes[i] >>> 4).toString(16));
             hex.push((bytes[i] & 0xF).toString(16));
         }
         return hex.join("");
+}catch(e){
+	console.log("ERROR in bytestohex ="+e)
+	return "";
+}
+
     };
 
 var candleName="";
@@ -193,7 +418,8 @@ var im=0;
 var modeno=0;
 var s1=0;
 var s2=0;
-
+var myletter=0;
+var seg1letter=' ';
 /************************************************************************
  * Discover BLE devices
  ************************************************************************/
@@ -326,7 +552,7 @@ CandleDevice.discover(function(device) {
     mqttClient.on('connect', function(){
         var i=0;
         log(io,"connected to IBM IOTF/Bluemix");
-
+	log(io,"Bink Candel and set to gree");
                   setCandleColor(0,0,0);//  setCandleOff();
                     sleep(250);
                   setCandleColor(0,0,255);//  setCandleBlue();
@@ -334,7 +560,8 @@ CandleDevice.discover(function(device) {
                   setCandleColor(0,0,0);//  setCandleOff();
                     sleep(250);
                   setCandleColor(0,255,0);//setCandleGreen();
-
+	log(io,"Put GPIO16 (LED1) to High / on");
+  	led1.digitalWrite(1);
                   /************************************************************************
                    * Send some device Information to WIOT and NODE-RED
                    ************************************************************************/
@@ -352,13 +579,19 @@ CandleDevice.discover(function(device) {
           if( isNaN(modeno) )
           modeno=0
 
-         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+'","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
+
+	  if ( myletter == null || (typeof myletter !== "undefined"))
+		myletter='#';
+
+         var mqmsg  ='{"event":"ping","value":'+i+',"status":"'+status+'","modeno":'+modeno+',"modes1":'+s1+',"modes2":'+s2+',"mode":"'+cmode+
+        '","batLevel":'+batLevel+',"candleColor":"'+candleColor+'","candleRR":'+rr+',"candleGG":'+gg+',"candleBB":'+bb+
+        ',"seg1letter":"'+myletter+'","ir1":'+ir1.digitalRead()+',"ir2":'+ir2.digitalRead()+',"ipAddr":"'+intIP+'","candleID":"'+device.id+'","version":"'+VERSION+'","candleName":"'+candleName+'","ts":"'+Date.now()+'"}';
 
         mqttClient.publish('ping', 'json', mqmsg,1);
          log(io,mqmsg);
           //  setCandleColor(0,0,i);
           //Text    mqttClient.publish('stt', 'json', '{"text":"Set candle to blue"}');
-        },5000);
+        },2000);
 
         //setCandleBlue();
     });
@@ -375,11 +608,39 @@ CandleDevice.discover(function(device) {
 
     console.log("Command:", commandName);
     log(io,"Comand received with payload = "+JSON.parse(payload));
+   // console.log(payload);
     myjson = JSON.parse(payload);
+    console.log(myjson);
     mqttClient.publish('confirmation', 'json', myjson,1);
     log(io,"Command:" + commandName +" Payload:"+myjson);
 //  console.log("payload = "+JSON.parse(payload).rr);
-    if(commandName === "setModeCandleLight") {
+
+
+    if(commandName === "setLED1on") {
+          setLED1(1);
+  	}else if (commandName === "setLED1off"){
+          setLED1(0);
+        }else if (commandName === "setGPIOon"){
+          setGPIO(myjson.gpio,1);
+       }else if (commandName === "setGPIOoff"){
+          setGPIO(myjson.gpio,0);
+
+	}else if (commandName === "setLED1"){
+	  setLED1(myjson.level);
+	 }else if (commandName === "draw7SLED"){
+          myletter = draw.display(myjson.value);
+         }else if (commandName === "rotate7SLED"){
+
+          myletter = '@'
+	  draw.rotate();
+          //sing7SLEDletter = myjson.value;
+        }else if (commandName === "set7SLED"){
+          myletter = draw.setAll(myjson.A,myjson.B,myjson.C,myjson.D,myjson.E,myjson.F,myjson.G,myjson.DP);
+	  myletter = '*'
+   	}else if (commandName === "init7SLED"){
+          draw = new segment(Gpio,myjson.pinA,myjson.pinB,myjson.pinC,myjson.pinD,myjson.pinE,myjson.pinF,myjson.pinG,myjson.pinDP); // OR your own wiring options
+
+      }else if(commandName === "setModeCandleLight") {
           setCandleMode(0,255,255,4,10,0);
       }else if(commandName === "setCandleMode") {
             setCandleMode(myjson.rr,myjson.gg,myjson.bb,myjson.mode,myjson.speed1,myjson.speed2);
@@ -387,7 +648,71 @@ CandleDevice.discover(function(device) {
             setCandleColor(0,0,255);
         } else if(commandName === "setColor") {
             setCandleColor(myjson.rr,myjson.gg,myjson.bb);
-        }else {
+
+ } else if (commandName === "armFORWARD") {
+      console.log("armForward = 2000");
+      motor.servoWrite(1600); //open
+
+    } else if(commandName === "armUP") {
+      console.log("armUP = 1000 ");
+      motor.servoWrite(1000); //open
+
+    } else if(commandName === "armBACK") {
+   console.log("armBACK = 500") ;
+    motor.servoWrite(500); //open
+
+    } else if(commandName === "armMOVE") {
+        console.log("armMove");
+        console.log("armMove value = "+myjson.d.motorSpin);
+        motor.servoWrite(myjson.d.motorSpin); //open
+
+    } else if(commandName === "armWAVE") {
+
+     console.log("armWave");
+
+     motor.servoWrite(1200);
+     sleep(300)
+     motor.servoWrite(2000);
+     sleep(400);
+     motor.servoWrite(1200);
+     sleep(300)
+     motor.servoWrite(2000);
+     sleep(400);
+     motor.servoWrite(1200);
+
+    } else if(commandName === "startpicture") {
+/*
+
+	RaspiCam {
+  opts: 
+   { mode: 'photo',
+     output: 'image.jpg',
+     timeout: 0,
+     nopreview: true,
+     vflip: false,
+     hflip: false,
+     width: 640,
+     height: 480,
+     log: [Function: bound consoleCall] },
+  filename: 'image.jpg',
+  filepath: './',
+*/
+ 	camera.opts.width = myjson.width;
+	camera.opts.height = myjson.height;
+ 	if(myjson.hflip)
+ 		camera.opts.hflip = myjson.hflip;
+	else
+		delete camera.opts.hflip
+        //camera.opts.vflip = myjson.vflip;
+	console.log(camera)	
+	camera.start();
+	
+    } else if(commandName === "stoppicture") {
+
+      
+	camera.stop();
+
+}else {
             log(io,"Command not supported.. " + commandName);
         }
     }); //Command
@@ -401,11 +726,12 @@ CandleDevice.discover(function(device) {
 function getCandleInfos()
 {
 
+/*
       device.readManufacturerName(function(error,data) {
         console.log('readManufacturerName '+data);
       });
 
-/*
+
       device.readModelNumber(function(error,data) {
         console.log('readModelNumber '+data);
       });
@@ -442,6 +768,58 @@ function getCandleInfos()
  });
 
 }
+	/**********************
+	PI GPIO functions
+	***********************/
+function setGPIO(gpio,level)
+{
+	switch(gpio)
+	{
+        case 5:
+		gpio5.digitalWrite(level);
+                break;
+
+	case 6:
+  		gpio6.digitalWrite(level);
+		break;
+	case 13:
+		gpio13.digitalWrite(level);
+		break;
+        case 19:
+  		gpio19.digitalWrite(level);
+		break;
+
+      	case 26:
+		console.log(">>>>> SetGPIO26 to "+level)
+		gpio26.digitalWrite(level);
+                break;
+	default:
+//"GPIO port "+gpio+" no supported
+	msg = "GPIO port "+gpio+" no supported";
+
+  	var mqmsg  ='{"event":"ERROR","cmd":"setGPIO","message":"'+msg+'"}'
+
+        mqttClient.publish('error', 'json', mqmsg,1);
+        log(io,mqmsg);
+	break;
+	}
+}
+
+function setLED1(level)
+{
+	led1.digitalWrite(level);
+}
+
+///####
+var mygpio;
+function setNewGPIO(gpio,level)
+{
+mygpio = new Gpio(gpio, {mode: Gpio.INPUT, alert: true});
+mygpio.digitalWrite(level);
+}
+
+
+
     /************************************************************************
      * PlayBulb Functions
      ************************************************************************/
